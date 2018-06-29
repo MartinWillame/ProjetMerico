@@ -254,6 +254,31 @@ public class Utilisateur {
         return false;
     }
 
+    /*
+    Retourne l'utilisateur correspondant à l'identifiant en argumment, si il n'existe pas dans la bdd retourne null
+     */
+    public Utilisateur getUtilisateur(int idu){
+        Utilisateur uti = userSparseArray.get(idu);
+        if(uti==null){
+            SQLiteDatabase db = MySQLiteHelper.get().getReadableDatabase();
+            Cursor cursor = db.rawQuery("SELECT * FROM Utilisateur u WHERE idu==u.Idu",null );
+            cursor.moveToFirst();
+            while(!cursor.isAfterLast()){
+                String photo = cursor.getString(1);
+                String nom = cursor.getString(2);
+                String prenom = cursor.getString(3);
+                String ville = cursor.getString(4);
+                String unnif = cursor.getString(5);
+                String identifiant = cursor.getString(6);
+                uti = new Utilisateur(idu,nom,prenom,ville,unnif,identifiant,photo);
+                cursor.moveToNext();
+            }
+            cursor.close();
+            db.close();
+        }
+        return uti;
+    }
+
 
 
 

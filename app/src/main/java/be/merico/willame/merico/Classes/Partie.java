@@ -99,6 +99,8 @@ public class Partie {
 
     //Fonctions de lien avec la db
 
+    //Autres fonctions
+
 
     /*
    retourne le plus petit Id libre dans la bdd pour créer une nouvelle partie
@@ -115,6 +117,28 @@ public class Partie {
         cursor.close();
         db.close();
         return pIdMAX+1;
+    }
+
+    /*
+    Retourne true si l'idp est déjà présent dans la bdd, sinon false;
+     */
+    public boolean isPartie(int idp){
+        SQLiteDatabase db = MySQLiteHelper.get().getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT Idp FROM Partie ",null );
+        cursor.moveToFirst();
+        int id;
+        while (!cursor.isAfterLast()){
+            id=cursor.getInt(0);
+            if(id==idp) {
+                cursor.close();
+                db.close();
+                return true;
+            }
+            cursor.moveToNext();
+        }
+        cursor.close();
+        db.close();
+        return false;
     }
 
 }

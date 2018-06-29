@@ -56,6 +56,8 @@ public class Mode_De_Jeu {
 
     //Fonctions de lien avec la db
 
+    //Autres fonctions
+
 
     /*
    retourne le plus petit Id libre dans la bdd pour créer un nouveau Mode de jeu
@@ -72,5 +74,27 @@ public class Mode_De_Jeu {
         cursor.close();
         db.close();
         return mIdMAX+1;
+    }
+
+    /*
+    Retourne true si l'idm est déjà présent dans la bdd, sinon false;
+     */
+    public boolean isModeDeJeu(int idm){
+        SQLiteDatabase db = MySQLiteHelper.get().getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT Idm FROM ModeDeJeu ",null );
+        cursor.moveToFirst();
+        int id;
+        while (!cursor.isAfterLast()){
+            id=cursor.getInt(0);
+            if(id==idm) {
+                cursor.close();
+                db.close();
+                return true;
+            }
+            cursor.moveToNext();
+        }
+        cursor.close();
+        db.close();
+        return false;
     }
 }

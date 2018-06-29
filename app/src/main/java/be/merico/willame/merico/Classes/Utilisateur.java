@@ -1,5 +1,6 @@
 package be.merico.willame.merico.Classes;
 
+import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.SparseArray;
@@ -35,7 +36,6 @@ public class Utilisateur {
         this.unnif=unnif;
         this.identifiant=identifiant;
         Utilisateur.userSparseArray.put(idu, this);
-
     }
 
     //Getteurs et setteurs basiques
@@ -105,8 +105,93 @@ public class Utilisateur {
         this.ville = ville;
     }
 
+
+
     //Fonctions de lien avec la db
 
+    /*
+    Met-à-jour l'objet ainsi que la bdd
+     */
+    void setPhotoInDb(String photo){
+        this.photo = photo;
+        SQLiteDatabase db = MySQLiteHelper.get().getReadableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("Photo", photo);
+        String arg=Integer.toString(this.getIdu());
+        // updating row
+        db.update("Utilisateur", values, "Idu = " + arg,null);
+        db.close();
+    }
+
+    /*
+    Met-à-jour l'objet ainsi que la bdd
+     */
+    void setNomInDb(String nom){
+        this.nom =nom;
+        SQLiteDatabase db = MySQLiteHelper.get().getReadableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("Nom", nom);
+        String arg=Integer.toString(this.getIdu());
+        // updating row
+        db.update("Utilisateur", values, "Idu = " + arg,null);
+        db.close();
+    }
+
+    /*
+    Met-à-jour l'objet ainsi que la bdd
+    */
+    void setPrenomInDb(String prenom){
+        this.prenom =prenom;
+        SQLiteDatabase db = MySQLiteHelper.get().getReadableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("Prenom", prenom);
+        String arg=Integer.toString(this.getIdu());
+        // updating row
+        db.update("Utilisateur", values, "Idu = " + arg,null);
+        db.close();
+    }
+
+    /*
+    Met-à-jour l'objet ainsi que la bdd
+     */
+    void setvilleInDb(String ville){
+        this.ville = ville;
+        SQLiteDatabase db = MySQLiteHelper.get().getReadableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("Ville", ville);
+        String arg=Integer.toString(this.getIdu());
+        // updating row
+        db.update("Utilisateur", values, "Idu = " + arg,null);
+        db.close();
+    }
+
+    /*
+    Met-à-jour l'objet ainsi que la bdd
+     */
+    void setUnnifInDb(String unnif){
+        this.unnif = unnif;
+        SQLiteDatabase db = MySQLiteHelper.get().getReadableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("Unnif", unnif);
+        String arg=Integer.toString(this.getIdu());
+        // updating row
+        db.update("Utilisateur", values, "Idu = " + arg,null);
+        db.close();
+    }
+
+    /*
+   modifie la bdd ainsi que l'objet et retourne true si la modification a pu être faite
+   Si false est retourne alors l'identifiant existe deja pour un autre utilisateur
+    */
+    public boolean setIdentifiantInDb(String nouveauIdentifiant){
+
+    }
+
+
+
+
+
+    //Autres Fonctions
 
     /*
    retourne le plus petit Id libre dans la bdd pour créer un nouveel utilisateur
@@ -124,6 +209,54 @@ public class Utilisateur {
         db.close();
         return uIdMAX+1;
     }
+
+    /*
+    Retourne true si l'identifiant est déjà présent dans la bdd, sinon false
+     */
+    public boolean isUtilisateur(String identifiant){
+        SQLiteDatabase db = MySQLiteHelper.get().getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT Identifiant FROM Utilisateur ",null );
+        cursor.moveToFirst();
+        String id;
+        while (!cursor.isAfterLast()){
+            id=cursor.getString(0);
+            if(id.equals(identifiant)) {
+                cursor.close();
+                db.close();
+                return true;
+            }
+            cursor.moveToNext();
+        }
+        cursor.close();
+        db.close();
+        return false;
+    }
+
+    /*
+    Retourne true si l'idu est déjà présent dans la bdd, sinon false;
+     */
+    public boolean isUtilisateur(int idu){
+        SQLiteDatabase db = MySQLiteHelper.get().getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT Idu FROM Utilisateur ",null );
+        cursor.moveToFirst();
+        int id;
+        while (!cursor.isAfterLast()){
+            id=cursor.getInt(0);
+            if(id==idu) {
+                cursor.close();
+                db.close();
+                return true;
+            }
+            cursor.moveToNext();
+        }
+        cursor.close();
+        db.close();
+        return false;
+    }
+
+
+
+
 
 
 

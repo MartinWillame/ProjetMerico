@@ -56,6 +56,8 @@ public class Lieux {
 
     //Fonctions de lien avec la db
 
+    //Autres fonctions
+
 
     /*
    retourne le plus petit Id libre dans la bdd pour créer un nouveau lieu
@@ -72,6 +74,50 @@ public class Lieux {
         cursor.close();
         db.close();
         return lIdMAX+1;
+    }
+
+    /*
+    Retourne true si l'idl est déjà présent dans la bdd, sinon false;
+     */
+    public boolean isLieux(int idl){
+        SQLiteDatabase db = MySQLiteHelper.get().getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT Idl FROM Lieux ",null );
+        cursor.moveToFirst();
+        int id;
+        while (!cursor.isAfterLast()){
+            id=cursor.getInt(0);
+            if(id==idl) {
+                cursor.close();
+                db.close();
+                return true;
+            }
+            cursor.moveToNext();
+        }
+        cursor.close();
+        db.close();
+        return false;
+    }
+
+    /*
+    Retourne true si l'identifiant est déjà présent dans la bdd, sinon false
+     */
+    public boolean isLieux(String nom){
+        SQLiteDatabase db = MySQLiteHelper.get().getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT Nom FROM Lieux ",null );
+        cursor.moveToFirst();
+        String id;
+        while (!cursor.isAfterLast()){
+            id=cursor.getString(0);
+            if(id.equals(nom)) {
+                cursor.close();
+                db.close();
+                return true;
+            }
+            cursor.moveToNext();
+        }
+        cursor.close();
+        db.close();
+        return false;
     }
 
 }

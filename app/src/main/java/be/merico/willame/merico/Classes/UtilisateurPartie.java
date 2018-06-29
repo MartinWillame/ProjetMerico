@@ -30,6 +30,17 @@ public class UtilisateurPartie {
         UtilisateurPartie.utilisateurPartieSparseArray.put(this.id,this);
     }
 
+    public UtilisateurPartie(Utilisateur utilisateur, Partie partie, int nbr31Bu, int nbrDefaite, int nbrMericoBu){
+        this.id=idcounter;
+        this.utilisateur=utilisateur;
+        this.partie=partie;
+        idcounter++;
+        this.nbr31Bu=nbr31Bu;
+        this.nbrDefaite=nbrDefaite;
+        this.nbrMericoBu=nbrMericoBu;
+        UtilisateurPartie.utilisateurPartieSparseArray.put(this.id,this);
+    }
+
     //Getteurs et setteurs basiques
 
 

@@ -1,4 +1,4 @@
-package be.lsinf1225.minipoll.Classes;
+package be.merico.willame.merico.Classes;
 
 import android.content.Context;
 import android.database.Cursor;

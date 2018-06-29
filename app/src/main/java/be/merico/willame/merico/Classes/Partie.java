@@ -1,5 +1,9 @@
 package be.merico.willame.merico.Classes;
 
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.util.SparseArray;
+
 import java.util.LinkedList;
 
 /**
@@ -18,6 +22,8 @@ public class Partie {
     private Des des;
     private LinkedList<Utilisateur> listofplayers;
 
+    private static SparseArray<Partie> partieSparseArray= new SparseArray<>();
+
 
     //Constructeurs
 
@@ -29,6 +35,7 @@ public class Partie {
         this.lieu=lieu;
         this.listofplayers = new LinkedList<>();
         this.des=des;
+        Partie.partieSparseArray.put(idp,this);
     }
 
     //Getteurs et setteurs basiques
@@ -36,6 +43,10 @@ public class Partie {
 
     public Des getDes() {
         return des;
+    }
+
+    public static SparseArray<Partie> getPartieSparseArray() {
+        return partieSparseArray;
     }
 
     public int getIdp() {
@@ -84,6 +95,26 @@ public class Partie {
 
     public void setNbrTour(int nbrTour) {
         this.nbrTour = nbrTour;
+    }
+
+    //Fonctions de lien avec la db
+
+
+    /*
+   retourne le plus petit Id libre dans la bdd pour créer une nouvelle partie
+    */
+    public static int getLowestPartieIdAvailable(){
+        SQLiteDatabase db = MySQLiteHelper.get().getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT DISTINCT MAX(Idp) FROM Partie ",null );
+        cursor.moveToFirst();
+        int pIdMAX=0;
+        while (!cursor.isAfterLast()) {
+            pIdMAX = cursor.getInt(0);
+            cursor.moveToNext();
+        }
+        cursor.close();
+        db.close();
+        return pIdMAX+1;
     }
 
 }

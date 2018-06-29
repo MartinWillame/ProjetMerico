@@ -1,5 +1,9 @@
 package be.merico.willame.merico.Classes;
 
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.util.SparseArray;
+
 /**
  * Created by marti on 29-06-18.
  */
@@ -13,6 +17,8 @@ public class Des {
     private int valeur2;
     private int nbrLance;
 
+    private static SparseArray<Des> desSparseArray= new SparseArray<>();
+
     //Constructeurs
 
     public Des(int idd){
@@ -20,6 +26,7 @@ public class Des {
         this.valeur1=0;
         this.valeur2=0;
         this.nbrLance=0;
+        Des.desSparseArray.put(idd,this);
     }
 
     //Getteurs et setteurs basiques
@@ -27,6 +34,10 @@ public class Des {
 
     public int getIdd() {
         return idd;
+    }
+
+    public static SparseArray<Des> getDesSparseArray() {
+        return desSparseArray;
     }
 
     public int getNbrLance() {
@@ -51,5 +62,25 @@ public class Des {
 
     public void setValeur2(int valeur2) {
         this.valeur2 = valeur2;
+    }
+
+    //Fonctions de lien avec la db
+
+
+    /*
+   retourne le plus petit Id libre dans la bdd pour créer un nouveau des
+    */
+    public static int getLowestUserIdAvailable(){
+        SQLiteDatabase db = MySQLiteHelper.get().getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT DISTINCT MAX(Idd) FROM Dés ",null );
+        cursor.moveToFirst();
+        int dIdMAX=0;
+        while (!cursor.isAfterLast()) {
+            dIdMAX = cursor.getInt(0);
+            cursor.moveToNext();
+        }
+        cursor.close();
+        db.close();
+        return dIdMAX+1;
     }
 }
